@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 
 //token to verify email
 const createToken = (data) => {
-    return jwt.sign(data, process.env.SECRET, { expiresIn: '10m' });
+    return jwt.sign(data, process.env.SECRET, { expiresIn: '3m' });
 };
 
 const forgetPassword = async (req, res) => {
@@ -18,20 +18,21 @@ const forgetPassword = async (req, res) => {
         const link = `http://localhost:3000/api/password/reset-password/${oldUser._id}/${token}`;
 
         //send email to client
-        console.log(link);
         var transporter = nodemailer.createTransport({
             service: 'gmail',
+            secure: true,
+            port: 465,
             auth: {
-                user: 'youremail@gmail.com',
-                pass: 'yourpassword'
+                user: 'mrkingshukg@gmail.com',
+                pass: 'llygsyaapidflyew'
             }
         });
 
         var mailOptions = {
-            from: 'youremail@gmail.com',
+            from: 'mrkingshukg@gmail.com',
             to: email,
             subject: 'Sending Email using Node.js',
-            text: 'That was easy!'
+            text: `${link}` 
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
