@@ -12,7 +12,7 @@ const verifyLink = async (req, res) =>{
         const verify = jwt.verify(token, process.env.SECRET);
         if(verify.email === oldUser.email){
             //redirects to frontend route
-            return res.redirect(`http://localhost:5173/reset-password/${oldUser._id}/${token}`);
+            return res.redirect(`https://rishisdesign.in/reset-password/${oldUser._id}/${token}`);
         }
         return res.status(404).json({state: "error", message : "Invalid Link!!"});
     }
