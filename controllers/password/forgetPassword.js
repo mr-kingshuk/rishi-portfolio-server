@@ -31,8 +31,21 @@ const forgetPassword = async (req, res) => {
         var mailOptions = {
             from: 'mrkingshukg@gmail.com',
             to: email,
-            subject: 'Sending Email using Node.js',
-            text: `${link}` 
+            subject: 'Reset Password Request',
+            html: `
+                <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; text-align: center; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+                    <h2 style="color: #333;">Password Reset Request</h2>
+                    <p>You requested a password reset. Please use the button below to reset your password:</p>
+                    <p>
+                        <a href="${link}" style="display: inline-block; padding: 10px 20px; margin: 20px 0; font-size: 16px; color: #fff; background-color: #1a73e8; border-radius: 5px; text-decoration: none;">Reset Password</a>
+                    </p>
+                    <p style="color: #999;">This link will expire in 3 minutes. If you did not request a password reset, please ignore this email.</p>
+                    <footer style="margin-top: 20px; color: #999;">
+                        <p>Thank you,</p>
+                        <p>Rishika Portfolio Website</p>
+                    </footer>
+                </div>
+            `
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
