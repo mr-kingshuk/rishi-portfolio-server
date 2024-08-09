@@ -8,6 +8,7 @@ const createToken = (data) => {
 };
 
 const forgetPassword = async (req, res) => {
+    const BASE_URL_SERVER = process.env.BASE_URL_SERVER;
     const { email } = req.body;
     try {
         const oldUser = await userModel.findOne({ email });
@@ -15,7 +16,7 @@ const forgetPassword = async (req, res) => {
             return res.status(404).json({ state: "error", message: "Email is not found" });
         }
         const token = createToken({ email: oldUser.email, password: oldUser.password });
-        const link = `https://rishis-server-8l672.ondigitalocean.app/api/password/reset-password/${oldUser._id}/${token}`;
+        const link = `${BASE_URL_SERVER}/api/password/reset-password/${oldUser._id}/${token}`;
 
         //send email to client
         var transporter = nodemailer.createTransport({
@@ -23,13 +24,13 @@ const forgetPassword = async (req, res) => {
             secure: true,
             port: 465,
             auth: {
-                user: 'mrkingshukg@gmail.com',
-                pass: 'llygsyaapidflyew'
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD_APP_EMAIL
             }
         });
 
         var mailOptions = {
-            from: 'mrkingshukg@gmail.com',
+            from: process.env.EMAIL,
             to: email,
             subject: 'Reset Password Request',
             html: `
