@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 
 //token to verify email
 const createToken = (data) => {
-    return jwt.sign(data, process.env.SECRET, { expiresIn: '3m' });
+    return jwt.sign(data, process.env.SECRET, { expiresIn: '10m' });
 };
 
 const forgetPassword = async (req, res) => {
@@ -40,7 +40,7 @@ const forgetPassword = async (req, res) => {
                     <p>
                         <a href="${link}" style="display: inline-block; padding: 10px 20px; margin: 20px 0; font-size: 16px; color: #fff; background-color: #1a73e8; border-radius: 5px; text-decoration: none;">Reset Password</a>
                     </p>
-                    <p style="color: #999;">This link will expire in 3 minutes. If you did not request a password reset, please ignore this email.</p>
+                    <p style="color: #999;">This link will expire in 10 minutes. If you did not request a password reset, please ignore this email.</p>
                     <footer style="margin-top: 20px; color: #999;">
                         <p>Thank you,</p>
                         <p>Rishika Portfolio Website</p>
