@@ -17,7 +17,7 @@ const resetPassword =  async (req, res) =>{
     }
 
     if(!validator.isStrongPassword(password.password))
-        return res.status(404).json({error: "Password is not strong enough, must contain capital, lowercase, special character and number"});
+        return res.status(404).json({error: "Password is not strong enough, must be atleast 8 characters long, must contain capital, lowercase, special character and number"});
 
     try{
         const oldUser = await userModel.findOne({ _id : id });
