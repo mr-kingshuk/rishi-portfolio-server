@@ -10,7 +10,6 @@ const reorderProject = async (req, res) => {
                 {order : index+1},
                 { new: true }
             );
-            console.log(updatedProject);
         }));
 
         const sequence = await counter.find();
