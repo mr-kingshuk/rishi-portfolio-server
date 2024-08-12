@@ -9,7 +9,7 @@ const createToken = (data) => {
 
 const forgetPassword = async (req, res) => {
     const BASE_URL_SERVER = process.env.BASE_URL_SERVER;
-    consoel.log(BASE_URL_SERVER);
+    console.log(BASE_URL_SERVER);
     const { email } = req.body;
     try {
         const oldUser = await userModel.findOne({ email });
