@@ -1,6 +1,6 @@
 # Rishika Portfolio Website
 
-Client-side Repository is present at <a href="https://github.com/mr-kingshuk/rishi-portfolio-client" target="_blank" rel="noopener noreferrer">rishi-portfolio-server</a>
+Client-side Repository is present at <a href="https://github.com/mr-kingshuk/rishi-portfolio-client" target="_blank" rel="noopener noreferrer">rishi-portfolio-client</a>
 
 ![Project Showcase - Website Screenshot](public/Website-Preview.JPG)
 
@@ -10,12 +10,10 @@ Client-side Repository is present at <a href="https://github.com/mr-kingshuk/ris
 3. [Dependencies](#dependencies)
 4. [Environment Variables](#environment-variables)
 5. [API Reference](#api-reference)
-    - [Orders API](#orders-api)
-    - [Items-Category API](#items-category-api)
-    - [Password API](#password-api)
-    - [Store Timing API](#store-timing-api)
+    - [Project API](#project-api)
+    - [General API](#general-api)
     - [Users API](#users-api)
-    - [Workers API](#workers-api)
+    - [Password API](#password-api)
 6. [Contributing](#contributing)    
 7. [License](#license)
 
@@ -105,7 +103,347 @@ To run this project, you will need to add the following environment variables to
 - `PASSWORD_APP_EMAIL`: The less secure password for the email account used to send emails.
 
 ## API Reference
-### Orders API
+
+### Project API
+
+<details open>
+<summary><ins>1. Add New Project</ins></summary><br>
+
+**Description:** Adds a new project with associated media, footer, and hyperlinks. It also assigns an order number to the project based on the current sequence.
+
+```bash
+POST /api/project
+```
+
+**Middleware:** `requireAuth`
+
+**Parameters:**
+
+| Parameter  | Type    | Description                                                | Required |
+| :--------- | :------ | :--------------------------------------------------------- | :------- |
+| `data`     | `object` | Contains project details including `heroImage` and other project data | Yes      |
+| `media`    | `array`  | Array of media objects associated with the project          | Yes      |
+| `footer`   | `object` | Contains footer information, including hyperlinks           | Yes      |
+
+**Response Summary:**
+
+- **200:** Returns the newly created project object.
+- **400:** Returns an error object if there is an issue with creating the project.
+
+</details>
+
+<details>
+<summary><ins>2. Reorder Projects</ins></summary><br>
+
+**Description:** Updates the order of projects based on the provided list and adjusts the sequence value accordingly.
+
+```bash
+PUT /api/project/reorder
+```
+
+**Middleware:** `requireAuth`
+
+**Parameters:**
+
+| Parameter | Type   | Description                              | Required |
+| :-------- | :----- | :--------------------------------------- | :------- |
+| `project` | `array` | Array of projects with their new order    | Yes      |
+
+**Response Summary:**
+
+- **200:** Order updated successfully.
+- **500:** Server Error if there is an issue with the server.
+
+</details>
+
+<details>
+<summary><ins>3. Update Project</ins></summary><br>
+
+**Description:** Updates the details of an existing project. The project can include a hero image, associated media, and footer information including hyperlinks.
+
+```bash
+PUT /api/projects/:id
+```
+
+**Middleware:** `requireAuth`
+
+**Parameters:**
+
+| Parameter | Type   | Description                                                | Required |
+| :-------- | :----- | :--------------------------------------------------------- | :------- |
+| `data`    | `object` | Contains updated project details including `heroImage` and other project data | Yes      |
+| `media`   | `array`  | Array of media objects associated with the project          | Yes      |
+| `footer`  | `object` | Contains updated footer information, including hyperlinks  | Yes      |
+| `id`      | `string` | The ID of the project to be updated                         | Yes      |
+
+**Response Summary:**
+
+- **200:** Returns the updated project object.
+- **404:** Project not found with the provided ID.
+- **500:** Server Error if there is an issue with updating the project.
+
+</details>
+
+<details>
+<summary><ins>4. Get Top 3 Projects</ins></summary><br>
+
+**Description:** Retrieves the top 3 projects sorted by their order field. Each project includes fields for `heroImage`, `order`, `heading`, and `subHeading`.
+
+```bash
+GET /api/projects/top3Proj
+```
+
+**Response Summary:**
+
+- **200:** Returns an object containing an array of the top 3 projects, each with `heroImage`, `order`, `heading`, and `subHeading` fields.
+- **404:** No Projects Found if there are no projects available in the database.
+- **500:** Server Error if there is an issue with retrieving the projects from the server.
+
+</details>
+
+<details>
+<summary><ins>5. Get All Projects</ins></summary><br>
+
+**Description:** Retrieves all projects from the database, including `heroImage`, `order`, `heading`, and `subHeading` fields, sorted by order.
+
+```bash
+GET /api/projects/allProj
+```
+
+**Response Summary:**
+
+- **200:** Returns an object containing an array of all projects, each with `heroImage`, `order`, `heading`, and `subHeading` fields.
+- **404:** No Projects Found if there are no projects available in the database.
+- **500:** Server Error if there is an issue with retrieving the projects from the server.
+
+</details>
+
+<details>
+<summary><ins>6. Get Project Headers</ins></summary><br>
+
+**Description:** Retrieves all project headers including their order and heading.
+
+```bash
+GET /api/projects/projectHeaders
+```
+
+**Response Summary:**
+
+- **200:** Returns an object containing an array of all projects with `order` and `heading` fields.
+- **404:** No Projects Found if there are no projects available in the database.
+- **500:** Server Error if there is an issue with retrieving the projects from the server.
+
+</details>
+
+<details>
+<summary><ins>7. Get Project by ID</ins></summary><br>
+
+**Description:** Retrieves a project by its ID from the database, including populated `heroImage`, `media`, and `hyperlinks` fields.
+
+```bash
+GET /api/projects/:id
+```
+
+**Parameters:**
+
+| Parameter | Type   | Description                         | Required |
+| :-------- | :----- | :---------------------------------- | :------- |
+| `id`      | `string` | The ID of the project to retrieve    | Yes      |
+
+**Response Summary:**
+
+- **200:** Returns the project object including `heroImage`, `media`, and `hyperlinks` fields.
+- **400:** Not Valid OrderId if the provided ID is not a valid MongoDB ObjectId.
+- **404:** Project not found if there is no project with the specified ID.
+- **500:** Server Error if there is an issue with retrieving the project from the server.
+
+</details>
+
+<details>
+<summary><ins>8. Delete Project by ID</ins></summary><br>
+
+**Description:** Deletes a project from the database by its ID. This includes removing associated media files (e.g., hero image and other media) from the MediaModel.
+
+```bash
+DELETE /api/projects/:id
+```
+
+**Middleware:** `requireAuth`
+
+**Parameters:**
+
+| Parameter | Type   | Description                          | Required |
+| :-------- | :----- | :----------------------------------- | :------- |
+| `id`      | `string` | The ID of the project to delete       | Yes      |
+
+**Response Summary:**
+
+- **200:** Project Deleted Successfully if the project is successfully deleted.
+- **404:** Project Not Found if there is no project with the specified ID.
+- **500:** Server Error if there is an issue with deleting the project from the server.
+
+</details>
+
+### General API
+
+<details open>
+<summary><ins>1. Update General Information</ins></summary><br>
+
+**Description:** Updates the brief and resume fields in the general information.
+
+```bash
+PUT /api/general
+```
+
+**Middleware:** `requireAuth`
+
+**Parameters:**
+
+| Parameter | Type    | Description                     | Required |
+| :-------- | :------ | :------------------------------ | :------- |
+| `brief`   | `string` | Brief description or summary    | No       |
+| `resume`  | `string` | Link or content for the resume  | No       |
+
+**Response Summary:**
+
+- **200:** Info updated successfully, returns the updated `brief` and `resume` fields.
+- **400:** Update failed, possibly due to a validation error.
+- **404:** Empty fields detected if both `brief` and `resume` are null.
+- **500:** Server Error if there is an issue with the server.
+
+</details>
+
+<details>
+<summary><ins>2. Get General Information</ins></summary><br>
+
+**Description:** Retrieves general information such as a brief summary and resume details.
+
+```bash
+GET /api/general
+```
+
+**Response Summary:**
+
+- **200:** Returns an object containing the `brief` and `resume` fields.
+- **500:** Server Error if there is an issue with retrieving the data from the server.
+</details>
+
+### Users API
+
+<details open>
+<summary><ins>1. User Login</ins></summary><br>
+
+**Description:** Authenticates a user by email and password, returning a JWT token and user details upon successful login.
+
+```bash
+POST /api/users/login
+```
+**Parameters:**
+
+| Parameter | Type   | Description                  | Required |
+|-----------|--------|------------------------------|----------|
+| email     | string | Email of the user            | Yes      |
+| password  | string | Password of the user         | Yes      |
+
+**Response Summary:**
+
+- **200:** Returns user object with email and token, along with user details (name, rollNo, phoneNo, hostel).
+- **400:** Error if any fields are missing, if the email doesn't exist, or if the password doesn't match.
+</details>
+
+<details>
+<summary><ins>2. Signup User</ins></summary><br>
+
+**Description:** Creates a new user account  in the Database and returns a JWT token for authentication.
+
+```bash
+POST /api/users/signup
+```
+**Parameters:**
+
+| Parameter         | Type    | Description                          | Required |
+|-------------------|---------|--------------------------------------|----------|
+| email             | string  | Email of the user                    | Yes      |
+| password          | string  | Password of the user                 | Yes      |
+
+**Response Summary:**
+
+- **200:** Returns user object with email and token, along with user details (name).
+- **400:** Error if any fields are missing or if the signup validation fails.
+</details>
+
+
+### Password API
+
+<details open>
+<summary><ins>1. Send Reset Password Link</ins></summary><br>
+
+**Description:** Sends a reset password link to the specified email if it exists in the database.
+
+```bash
+POST /api/password/forget-password
+```
+**Parameters:** 
+
+| Parameter | Type   | Description                        | Required |
+| :-------- | :----- | :--------------------------------- | :------- |
+| `email`   | `string` | Email of the user for password reset | Yes      |
+
+**Response Summary:**
+
+- **200:** Reset Mail sent.
+- **404:** Email is not found if the specified email does not exist in the database.
+- **500:** Server Error if there is an issue with the server.
+</details>
+
+<details>
+<summary><ins>2. Verify Reset Password Link</ins></summary><br>
+
+**Description:** Verifies the reset password link and redirects the user to the reset password form.
+
+```bash
+GET /api/password/reset-password/:id/:token
+```
+
+**Parameters:**
+
+| Parameter | Type   | Description                                     | Required |
+| :-------- | :----- | :---------------------------------------------- | :------- |
+| `id`      | `string` | ID of the user requesting password reset        | Yes      |
+| `token`   | `string` | JWT token for verification                       | Yes      |
+
+**Response Summary:**
+
+- **200:** Redirects to the client reset password page.
+- **404:** User is not found if the specified user ID does not exist, or Invalid Link if the token verification fails.
+- **500:** Server Error if there is an issue with the server.
+</details>
+
+<details>
+<summary><ins>3. Reset Password</ins></summary><br>
+
+**Description:** Resets the user's password if the provided token is valid and matches the user's email.
+
+```bash
+POST /api/password/reset-password/:id/:token
+```
+**Parameters:**
+
+| Parameter      | Type   | Description                                       | Required |
+| :------------- | :----- | :------------------------------------------------ | :------- |
+| `id`           | `string` | ID of the user                                   | Yes      |
+| `token`        | `string` | JWT token for verification                        | Yes      |
+| `password`     | `string` | New password for the user                        | Yes      |
+| `passwordAgain`| `string` | Confirmation of the new password                | Yes      |
+
+**Response Summary:**
+
+- **200:** Returns the updated user object after password reset.
+- **400:** Reset Email Link has expired if the ID is not valid, or All fields must be filled if required fields are missing.
+- **404:** User is not found if the specified user ID does not exist, or Passwords don't match if the new password and confirmation do not match, or Password must meet complexity requirements if the new password is not strong enough.
+- **500:** Server Error if there is an issue with the server.
+
+</details>
 
 ## Contributing 
 

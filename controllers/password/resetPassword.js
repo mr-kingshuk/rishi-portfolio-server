@@ -9,7 +9,7 @@ const resetPassword =  async (req, res) =>{
     const { password } = req.body;
 
     if(!password.password || !password.passwordAgain){
-        return res.status(404).json({error: "All feilds must be filled"});
+        return res.status(400).json({error: "All feilds must be filled"});
     }
 
     if(password.password !== password.passwordAgain){
