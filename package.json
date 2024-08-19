@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "rishi-portfolio-server",
   "version": "1.0.0",
   "type": "module",
   "description": "",
@@ -9,8 +9,8 @@
     "dev": "nodemon app.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Designed by Rishika Garg and Developed by Kingshuk Ghosh",
+  "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
